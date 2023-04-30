@@ -1,0 +1,195 @@
+[gd_scene load_steps=20 format=3 uid="uid://cv64d407pajq1"]
+
+[ext_resource type="Script" path="res://src/player/player.gd" id="1_3e3jd"]
+[ext_resource type="Texture2D" uid="uid://csysjqawnmfrt" path="res://assets/playerbird.png" id="2_nt4sg"]
+[ext_resource type="Script" path="res://src/player/player_fsm.gd" id="3_koug7"]
+[ext_resource type="Script" path="res://src/player/idle.gd" id="4_5sgm5"]
+[ext_resource type="Script" path="res://src/player/move.gd" id="5_bmaea"]
+[ext_resource type="Script" path="res://src/player/jump.gd" id="6_cgmje"]
+[ext_resource type="Script" path="res://src/player/glide.gd" id="7_dynfx"]
+[ext_resource type="Script" path="res://src/player/fall.gd" id="8_pi5d4"]
+[ext_resource type="Texture2D" uid="uid://b2b5ypujqnhjr" path="res://assets/stamina_under.png" id="9_efelf"]
+[ext_resource type="Texture2D" uid="uid://5obaqnkiw8hr" path="res://assets/stamina_over.png" id="10_us0gx"]
+[ext_resource type="Texture2D" uid="uid://ccnlgkqrnbpml" path="res://assets/stamina_progress.png" id="11_5bwjb"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dvfak"]
+size = Vector2(12.1875, 32)
+
+[sub_resource type="Animation" id="Animation_cd00g"]
+resource_name = "glide"
+length = 0.9
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [6, 12, 13, 14, 13, 12, 13, 14]
+}
+
+[sub_resource type="Animation" id="Animation_r0xui"]
+resource_name = "idle"
+length = 0.8
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+
+[sub_resource type="Animation" id="Animation_bw7ha"]
+resource_name = "fly"
+length = 0.5
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [3, 4, 5, 6, 7, 6, 5, 4, 3]
+}
+
+[sub_resource type="Animation" id="Animation_540t8"]
+resource_name = "peck"
+length = 0.25
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [8, 9, 10, 11]
+}
+
+[sub_resource type="Animation" id="Animation_ea46o"]
+resource_name = "walk"
+length = 0.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.125),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [1, 2]
+}
+
+[sub_resource type="Animation" id="Animation_3dsba"]
+resource_name = "fall"
+length = 0.5
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [3, 4, 5, 6, 7, 6, 5, 4, 3]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_uxahf"]
+_data = {
+"fall": SubResource("Animation_3dsba"),
+"glide": SubResource("Animation_cd00g"),
+"idle": SubResource("Animation_r0xui"),
+"jump": SubResource("Animation_bw7ha"),
+"move": SubResource("Animation_ea46o"),
+"peck": SubResource("Animation_540t8")
+}
+
+[node name="Player" type="CharacterBody2D"]
+texture_filter = 1
+collision_mask = 2
+script = ExtResource("1_3e3jd")
+
+[node name="StateLabel" type="Label" parent="."]
+offset_left = -30.0
+offset_top = -43.0
+offset_right = 30.0
+offset_bottom = -18.0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StaminaBar" type="TextureProgressBar" parent="."]
+modulate = Color(0.0627451, 0.960784, 0, 1)
+self_modulate = Color(0.0627451, 0.960784, 0, 1)
+offset_left = -25.0
+offset_top = 21.0
+offset_right = 25.0
+offset_bottom = 33.0
+max_value = 50.0
+texture_under = ExtResource("9_efelf")
+texture_over = ExtResource("10_us0gx")
+texture_progress = ExtResource("11_5bwjb")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_nt4sg")
+hframes = 5
+vframes = 3
+
+[node name="Camera2D" type="Camera2D" parent="."]
+offset = Vector2(0, -50)
+zoom = Vector2(1.5, 1.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-3.09375, 2)
+shape = SubResource("RectangleShape2D_dvfak")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_uxahf")
+}
+
+[node name="PlayerFSM" type="Node" parent="."]
+script = ExtResource("3_koug7")
+
+[node name="Idle" type="Node" parent="PlayerFSM"]
+script = ExtResource("4_5sgm5")
+
+[node name="Move" type="Node" parent="PlayerFSM"]
+script = ExtResource("5_bmaea")
+
+[node name="Jump" type="Node" parent="PlayerFSM"]
+script = ExtResource("6_cgmje")
+
+[node name="Glide" type="Node" parent="PlayerFSM"]
+script = ExtResource("7_dynfx")
+
+[node name="Fall" type="Node" parent="PlayerFSM"]
+script = ExtResource("8_pi5d4")
+
+[node name="StaminaRegenTimer" type="Timer" parent="."]
+wait_time = 0.25
+
+[node name="GlideStaminaTimer" type="Timer" parent="."]
+wait_time = 0.5
+
+[connection signal="timeout" from="StaminaRegenTimer" to="PlayerFSM" method="_on_stamina_regen_timer_timeout"]
+[connection signal="timeout" from="GlideStaminaTimer" to="PlayerFSM/Glide" method="_on_glide_stamina_timer_timeout"]
