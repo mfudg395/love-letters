@@ -10,11 +10,17 @@ config_version=5
 
 [application]
 
-config/name="Love Letters"
+config/name="Love Letter"
 run/main_scene="res://src/Level1.tscn"
 config/features=PackedStringArray("4.0", "Forward Plus")
 run/max_fps=60
 config/icon="res://icon.svg"
+
+[display]
+
+window/size/mode=2
+window/stretch/mode="viewport"
+window/stretch/aspect="ignore"
 
 [input]
 

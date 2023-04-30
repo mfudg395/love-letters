@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://cg7w7injtfv6q"]
+[gd_scene load_steps=6 format=3 uid="uid://cg7w7injtfv6q"]
 
 [ext_resource type="PackedScene" uid="uid://cv64d407pajq1" path="res://src/player/Player.tscn" id="1_ek8qi"]
 [ext_resource type="Texture2D" uid="uid://bfyi2e38lay21" path="res://assets/basic_tileset.png" id="2_yw3dn"]
+[ext_resource type="Texture2D" uid="uid://cgj8160vctfbx" path="res://assets/letter.png" id="3_nycsy"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_j6m5o"]
 texture = ExtResource("2_yw3dn")
@@ -25,3 +26,8 @@ layer_0/tile_data = PackedInt32Array(1376256, 0, 0, 1376257, 0, 0, 1376266, 0, 0
 
 [node name="Player" parent="." instance=ExtResource("1_ek8qi")]
 position = Vector2(80, 536)
+
+[node name="Letter" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(229, 592)
+texture = ExtResource("3_nycsy")
