@@ -20,6 +20,23 @@ size = Vector2(19, 51)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pfbnp"]
 size = Vector2(19, 51)
 
+[sub_resource type="Animation" id="Animation_3dsba"]
+resource_name = "fall"
+length = 0.5
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [3, 4, 5, 6, 7, 6, 5, 4, 3]
+}
+
 [sub_resource type="Animation" id="Animation_cd00g"]
 resource_name = "glide"
 length = 0.9
@@ -69,23 +86,6 @@ tracks/0/keys = {
 "values": [3, 4, 5, 6, 7, 6, 5, 4, 3]
 }
 
-[sub_resource type="Animation" id="Animation_540t8"]
-resource_name = "peck"
-length = 0.25
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.1, 0.2),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [8, 9, 10, 11]
-}
-
 [sub_resource type="Animation" id="Animation_ea46o"]
 resource_name = "walk"
 length = 0.25
@@ -102,9 +102,9 @@ tracks/0/keys = {
 "values": [1, 2]
 }
 
-[sub_resource type="Animation" id="Animation_3dsba"]
-resource_name = "fall"
-length = 0.5
+[sub_resource type="Animation" id="Animation_540t8"]
+resource_name = "peck"
+length = 0.25
 step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -113,10 +113,10 @@ tracks/0/path = NodePath("Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
-"values": [3, 4, 5, 6, 7, 6, 5, 4, 3]
+"values": [8, 9, 10, 11]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_uxahf"]
@@ -135,6 +135,7 @@ collision_mask = 2
 script = ExtResource("1_3e3jd")
 
 [node name="StateLabel" type="Label" parent="."]
+visible = false
 offset_left = -30.0
 offset_top = -57.0
 offset_right = 30.0
@@ -167,9 +168,9 @@ visible = false
 position = Vector2(-3.5, 1.5)
 shape = SubResource("RectangleShape2D_dvfak")
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="MailboxDetection" type="Area2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MailboxDetection"]
 position = Vector2(-3.5, 1.5)
 shape = SubResource("RectangleShape2D_pfbnp")
 
@@ -220,6 +221,7 @@ theme_override_font_sizes/font_size = 64
 text = "0"
 vertical_alignment = 1
 
-[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
+[connection signal="area_entered" from="MailboxDetection" to="." method="_on_area_2d_area_entered"]
+[connection signal="area_exited" from="MailboxDetection" to="." method="_on_area_2d_area_exited"]
 [connection signal="timeout" from="StaminaRegenTimer" to="PlayerFSM" method="_on_stamina_regen_timer_timeout"]
 [connection signal="timeout" from="GlideStaminaTimer" to="PlayerFSM/Glide" method="_on_glide_stamina_timer_timeout"]

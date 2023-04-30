@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://t7was25fot5o"]
+
+[ext_resource type="Script" path="res://src/mailbox/mailbox.gd" id="1_bocon"]
+[ext_resource type="Texture2D" uid="uid://b7v4kujysqj4j" path="res://assets/mailbox.png" id="1_wulbu"]
+[ext_resource type="FontFile" uid="uid://bwitkp7grmtju" path="res://assets/VCR_OSD_MONO_1.001.ttf" id="3_am2uf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5hrtd"]
+size = Vector2(140, 80)
+
+[node name="Mailbox" type="Area2D"]
+script = ExtResource("1_bocon")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("1_wulbu")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_5hrtd")
+
+[node name="DepositedLettersIndicator" type="Label" parent="."]
+visible = false
+texture_filter = 1
+offset_left = -56.0
+offset_top = -86.0
+offset_right = 56.0
+offset_bottom = -40.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_am2uf")
+theme_override_font_sizes/font_size = 32
+text = "0/5"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="area_exited" from="." to="." method="_on_area_exited"]

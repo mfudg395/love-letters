@@ -1,7 +1,7 @@
 class_name Player
 extends CharacterBody2D
 
-const MAX_FALL_SPEED := 110
+const MAX_FALL_SPEED := 125
 const AIR_DEACCELERATION := 0.99
 const JUMP_STAMINA_COST := 25
 const GLIDE_STAMINA_COST := 1 # stamina drain per GLIDE_STAMINA_INTERVAL
@@ -18,6 +18,9 @@ const STAMINA_REGEN_INTERVAL := 0.025 # how often to increase stamina by STAMINA
 @export var max_stamina := 50
 @export var current_stamina := 50
 @onready var letters := 0
+@onready var is_near_mailbox := false
+@onready var near_mailbox_letters := 0
+@onready var near_mailbox: Area2D
 
 @onready var animations = get_node("AnimationPlayer")
 @onready var sprite = get_node("Sprite2D")
@@ -37,6 +40,7 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the prDevious frame.
 func _process(delta) -> void:
 	state_machine._process(delta)
+	letter_label.text = str(letters)
 
 func _physics_process(delta) -> void:
 	if Input.is_action_just_pressed("peck"):
@@ -52,9 +56,23 @@ func _physics_process(delta) -> void:
 		stamina_bar.visible = false
 	else:
 		stamina_bar.visible = true
-
+	
+	if (can_deposit()):
+		if Input.is_action_just_pressed("deliver"):
+			letters -= 1
+			near_mailbox.deposited_letters += 1
 
 func _on_area_2d_area_entered(area):
 	if ("Letter" in area.get_name()):
 		letters += 1;
-		letter_label.text = str(letters)
+	if ("Mailbox" in area.get_name()):
+		is_near_mailbox = true
+		near_mailbox = area
+
+func _on_area_2d_area_exited(area):
+	if ("Mailbox" in area.get_name()):
+		is_near_mailbox = false
+		near_mailbox = null
+
+func can_deposit() -> bool:
+	return is_near_mailbox and letters > 0 and near_mailbox.deposited_letters < near_mailbox.MAX_LETTERS
