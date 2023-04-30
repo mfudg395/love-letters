@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://cv64d407pajq1"]
+[gd_scene load_steps=24 format=3 uid="uid://cv64d407pajq1"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_3e3jd"]
 [ext_resource type="Texture2D" uid="uid://csysjqawnmfrt" path="res://assets/playerbird.png" id="2_nt4sg"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://ccnlgkqrnbpml" path="res://assets/stamina_progress.png" id="11_5bwjb"]
 [ext_resource type="Texture2D" uid="uid://cgj8160vctfbx" path="res://assets/letter.png" id="12_rt7a8"]
 [ext_resource type="FontFile" uid="uid://bwitkp7grmtju" path="res://assets/VCR_OSD_MONO_1.001.ttf" id="13_cso16"]
+[ext_resource type="Texture2D" uid="uid://b7v4kujysqj4j" path="res://assets/mailbox.png" id="13_rg8td"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dvfak"]
 size = Vector2(19, 51)
@@ -159,6 +160,7 @@ texture_progress = ExtResource("11_5bwjb")
 texture = ExtResource("2_nt4sg")
 hframes = 5
 vframes = 3
+frame = 3
 
 [node name="Camera2D" type="Camera2D" parent="."]
 offset = Vector2(0, -50)
@@ -208,6 +210,14 @@ position = Vector2(-491, -304)
 scale = Vector2(2.43333, 2.66667)
 texture = ExtResource("12_rt7a8")
 
+[node name="MailboxUI" type="Sprite2D" parent="."]
+position = Vector2(-471, -200)
+scale = Vector2(1.35, 1.35)
+texture = ExtResource("13_rg8td")
+hframes = 3
+vframes = 2
+frame = 5
+
 [node name="LetterLabel" type="Label" parent="."]
 texture_filter = 1
 offset_left = -432.0
@@ -219,6 +229,19 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("13_cso16")
 theme_override_font_sizes/font_size = 64
 text = "0"
+vertical_alignment = 1
+
+[node name="MailboxLabel" type="Label" parent="."]
+texture_filter = 1
+offset_left = -432.0
+offset_top = -239.0
+offset_right = -322.0
+offset_bottom = -159.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("13_cso16")
+theme_override_font_sizes/font_size = 64
+text = "0/5"
 vertical_alignment = 1
 
 [connection signal="area_entered" from="MailboxDetection" to="." method="_on_area_2d_area_entered"]

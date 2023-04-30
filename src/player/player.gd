@@ -20,6 +20,7 @@ const STAMINA_REGEN_INTERVAL := 0.025 # how often to increase stamina by STAMINA
 @onready var letters := 0
 @onready var is_near_mailbox := false
 @onready var near_mailbox_letters := 0
+@onready var full_mailboxes := 0
 @onready var near_mailbox: Area2D
 
 @onready var animations = get_node("AnimationPlayer")
@@ -29,6 +30,7 @@ const STAMINA_REGEN_INTERVAL := 0.025 # how often to increase stamina by STAMINA
 @onready var stamina_regen_timer = get_node("StaminaRegenTimer")
 @onready var glide_stamina_timer = get_node("GlideStaminaTimer")
 @onready var letter_label = get_node("LetterLabel")
+@onready var mailbox_label = get_node("MailboxLabel")
 
 var is_facing_right := true
 var is_pecking := false
@@ -41,6 +43,7 @@ func _ready() -> void:
 func _process(delta) -> void:
 	state_machine._process(delta)
 	letter_label.text = str(letters)
+	mailbox_label.text = str(full_mailboxes) + "/5"
 
 func _physics_process(delta) -> void:
 	if Input.is_action_just_pressed("peck"):
@@ -60,7 +63,9 @@ func _physics_process(delta) -> void:
 	if (can_deposit()):
 		if Input.is_action_just_pressed("deliver"):
 			letters -= 1
-			near_mailbox.deposited_letters += 1
+			near_mailbox.deposit_letter()
+			if near_mailbox.is_full():
+				full_mailboxes += 1
 
 func _on_area_2d_area_entered(area):
 	if ("Letter" in area.get_name()):
@@ -75,4 +80,4 @@ func _on_area_2d_area_exited(area):
 		near_mailbox = null
 
 func can_deposit() -> bool:
-	return is_near_mailbox and letters > 0 and near_mailbox.deposited_letters < near_mailbox.MAX_LETTERS
+	return is_near_mailbox and letters > 0 and !near_mailbox.is_full()

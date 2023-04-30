@@ -35,7 +35,7 @@ position = Vector2(1103, 440)
 position = Vector2(80, 536)
 
 [node name="Letter" parent="." instance=ExtResource("3_h8vt6")]
-position = Vector2(1067, 376)
+position = Vector2(994, 440)
 
 [node name="Letter2" parent="." instance=ExtResource("3_h8vt6")]
 position = Vector2(1178, 407)
@@ -44,28 +44,22 @@ position = Vector2(1178, 407)
 position = Vector2(1001, 395)
 
 [node name="Letter4" parent="." instance=ExtResource("3_h8vt6")]
-position = Vector2(795, 379)
-
-[node name="Letter5" parent="." instance=ExtResource("3_h8vt6")]
-position = Vector2(707, 581)
+position = Vector2(775, 368)
 
 [node name="Letter6" parent="." instance=ExtResource("3_h8vt6")]
-position = Vector2(701, 513)
+position = Vector2(479, 508)
 
 [node name="Letter7" parent="." instance=ExtResource("3_h8vt6")]
-position = Vector2(781, 574)
+position = Vector2(679, 344)
 
 [node name="Letter8" parent="." instance=ExtResource("3_h8vt6")]
-position = Vector2(766, 520)
-
-[node name="Letter9" parent="." instance=ExtResource("3_h8vt6")]
-position = Vector2(635, 552)
+position = Vector2(378, 586)
 
 [node name="Letter10" parent="." instance=ExtResource("3_h8vt6")]
-position = Vector2(623, 481)
+position = Vector2(529, 461)
 
 [node name="Letter11" parent="." instance=ExtResource("3_h8vt6")]
-position = Vector2(718, 476)
+position = Vector2(431, 547)
 
 [node name="Letter12" parent="." instance=ExtResource("3_h8vt6")]
-position = Vector2(830, 541)
+position = Vector2(885, 390)
