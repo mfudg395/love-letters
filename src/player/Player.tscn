@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://cv64d407pajq1"]
+[gd_scene load_steps=23 format=3 uid="uid://cv64d407pajq1"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_3e3jd"]
 [ext_resource type="Texture2D" uid="uid://csysjqawnmfrt" path="res://assets/playerbird.png" id="2_nt4sg"]
@@ -11,8 +11,13 @@
 [ext_resource type="Texture2D" uid="uid://b2b5ypujqnhjr" path="res://assets/stamina_under.png" id="9_efelf"]
 [ext_resource type="Texture2D" uid="uid://5obaqnkiw8hr" path="res://assets/stamina_over.png" id="10_us0gx"]
 [ext_resource type="Texture2D" uid="uid://ccnlgkqrnbpml" path="res://assets/stamina_progress.png" id="11_5bwjb"]
+[ext_resource type="Texture2D" uid="uid://cgj8160vctfbx" path="res://assets/letter.png" id="12_rt7a8"]
+[ext_resource type="FontFile" uid="uid://bwitkp7grmtju" path="res://assets/VCR_OSD_MONO_1.001.ttf" id="13_cso16"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dvfak"]
+size = Vector2(19, 51)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pfbnp"]
 size = Vector2(19, 51)
 
 [sub_resource type="Animation" id="Animation_cd00g"]
@@ -158,8 +163,15 @@ vframes = 3
 offset = Vector2(0, -50)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(-3.5, 1.5)
 shape = SubResource("RectangleShape2D_dvfak")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(-3.5, 1.5)
+shape = SubResource("RectangleShape2D_pfbnp")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -190,5 +202,24 @@ wait_time = 0.25
 [node name="GlideStaminaTimer" type="Timer" parent="."]
 wait_time = 0.5
 
+[node name="LetterUI" type="Sprite2D" parent="."]
+position = Vector2(-491, -304)
+scale = Vector2(2.43333, 2.66667)
+texture = ExtResource("12_rt7a8")
+
+[node name="LetterLabel" type="Label" parent="."]
+texture_filter = 1
+offset_left = -432.0
+offset_top = -344.0
+offset_right = -322.0
+offset_bottom = -264.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("13_cso16")
+theme_override_font_sizes/font_size = 64
+text = "0"
+vertical_alignment = 1
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
 [connection signal="timeout" from="StaminaRegenTimer" to="PlayerFSM" method="_on_stamina_regen_timer_timeout"]
 [connection signal="timeout" from="GlideStaminaTimer" to="PlayerFSM/Glide" method="_on_glide_stamina_timer_timeout"]

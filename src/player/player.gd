@@ -17,6 +17,7 @@ const STAMINA_REGEN_INTERVAL := 0.025 # how often to increase stamina by STAMINA
 @export var jump_strength := -400.0
 @export var max_stamina := 50
 @export var current_stamina := 50
+@onready var letters := 0
 
 @onready var animations = get_node("AnimationPlayer")
 @onready var sprite = get_node("Sprite2D")
@@ -24,6 +25,7 @@ const STAMINA_REGEN_INTERVAL := 0.025 # how often to increase stamina by STAMINA
 @onready var stamina_bar = get_node("StaminaBar")
 @onready var stamina_regen_timer = get_node("StaminaRegenTimer")
 @onready var glide_stamina_timer = get_node("GlideStaminaTimer")
+@onready var letter_label = get_node("LetterLabel")
 
 var is_facing_right := true
 var is_pecking := false
@@ -50,3 +52,9 @@ func _physics_process(delta) -> void:
 		stamina_bar.visible = false
 	else:
 		stamina_bar.visible = true
+
+
+func _on_area_2d_area_entered(area):
+	if ("Letter" in area.get_name()):
+		letters += 1;
+		letter_label.text = str(letters)
