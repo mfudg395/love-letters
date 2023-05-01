@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://cv64d407pajq1"]
+[gd_scene load_steps=28 format=3 uid="uid://cv64d407pajq1"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_3e3jd"]
 [ext_resource type="Texture2D" uid="uid://csysjqawnmfrt" path="res://assets/playerbird.png" id="2_nt4sg"]
@@ -14,6 +14,10 @@
 [ext_resource type="Texture2D" uid="uid://cgj8160vctfbx" path="res://assets/letter.png" id="12_rt7a8"]
 [ext_resource type="FontFile" uid="uid://bwitkp7grmtju" path="res://assets/VCR_OSD_MONO_1.001.ttf" id="13_cso16"]
 [ext_resource type="Texture2D" uid="uid://b7v4kujysqj4j" path="res://assets/mailbox.png" id="13_rg8td"]
+[ext_resource type="AudioStream" uid="uid://b4m4y5n3txiqs" path="res://assets/sfx/mailbox_full.wav" id="15_k3tu3"]
+[ext_resource type="AudioStream" uid="uid://chg4m0354rjvb" path="res://assets/sfx/jump.wav" id="15_sytta"]
+[ext_resource type="AudioStream" uid="uid://ja0vpmhb14kv" path="res://assets/sfx/letter_pickup.wav" id="16_xctil"]
+[ext_resource type="AudioStream" uid="uid://cq1xmgclkx6k5" path="res://assets/sfx/letter_deposit.wav" id="17_xpqa1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dvfak"]
 size = Vector2(19, 51)
@@ -160,7 +164,6 @@ texture_progress = ExtResource("11_5bwjb")
 texture = ExtResource("2_nt4sg")
 hframes = 5
 vframes = 3
-frame = 3
 
 [node name="Camera2D" type="Camera2D" parent="."]
 offset = Vector2(0, -50)
@@ -243,6 +246,20 @@ theme_override_fonts/font = ExtResource("13_cso16")
 theme_override_font_sizes/font_size = 64
 text = "0/5"
 vertical_alignment = 1
+
+[node name="JumpSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("15_sytta")
+volume_db = -4.685
+
+[node name="LetterPickupSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("16_xctil")
+
+[node name="LetterDepositSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("17_xpqa1")
+volume_db = -2.811
+
+[node name="MailboxFullSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("15_k3tu3")
 
 [connection signal="area_entered" from="MailboxDetection" to="." method="_on_area_2d_area_entered"]
 [connection signal="area_exited" from="MailboxDetection" to="." method="_on_area_2d_area_exited"]

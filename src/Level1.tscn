@@ -63,3 +63,6 @@ position = Vector2(431, 547)
 
 [node name="Letter12" parent="." instance=ExtResource("3_h8vt6")]
 position = Vector2(885, 390)
+
+[node name="Letter5" parent="." instance=ExtResource("3_h8vt6")]
+position = Vector2(148, 599)

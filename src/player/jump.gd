@@ -7,7 +7,7 @@ extends State
 
 func enter() -> void:
 	player.velocity.y = player.jump_strength
-#	player.animations.play("jump")
+	player.jump_sfx.play()
 
 func physics_process(delta: float) -> void:
 #	player.sprite.flip_h = false if player.is_facing_right else true

@@ -31,6 +31,10 @@ const STAMINA_REGEN_INTERVAL := 0.025 # how often to increase stamina by STAMINA
 @onready var glide_stamina_timer = get_node("GlideStaminaTimer")
 @onready var letter_label = get_node("LetterLabel")
 @onready var mailbox_label = get_node("MailboxLabel")
+@onready var jump_sfx = get_node("JumpSFX")
+@onready var letter_pickup_sfx = get_node("LetterPickupSFX")
+@onready var letter_deposit_sfx = get_node("LetterDepositSFX")
+@onready var mailbox_full_sfx = get_node("MailboxFullSFX")
 
 var is_facing_right := true
 var is_pecking := false
@@ -46,30 +50,33 @@ func _process(delta) -> void:
 	mailbox_label.text = str(full_mailboxes) + "/5"
 
 func _physics_process(delta) -> void:
-	if Input.is_action_just_pressed("peck"):
-		animations.play("peck")
-	
 	if Input.is_action_pressed("move_right"):
 		is_facing_right = true
 	elif Input.is_action_pressed("move_left"):
 		is_facing_right = false
+		
 	state_machine._physics_process(delta)
+	
 	stamina_bar.value = current_stamina
 	if current_stamina == max_stamina:
 		stamina_bar.visible = false
 	else:
 		stamina_bar.visible = true
 	
-	if (can_deposit()):
-		if Input.is_action_just_pressed("deliver"):
+	if Input.is_action_just_pressed("deliver"):
+		if can_deposit():
 			letters -= 1
 			near_mailbox.deposit_letter()
 			if near_mailbox.is_full():
 				full_mailboxes += 1
+				mailbox_full_sfx.play()
+			else:
+				letter_deposit_sfx.play()
 
 func _on_area_2d_area_entered(area):
 	if ("Letter" in area.get_name()):
 		letters += 1;
+		letter_pickup_sfx.play()
 	if ("Mailbox" in area.get_name()):
 		is_near_mailbox = true
 		near_mailbox = area
