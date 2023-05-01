@@ -8,6 +8,8 @@ const GLIDE_STAMINA_COST := 1 # stamina drain per GLIDE_STAMINA_INTERVAL
 const GLIDE_STAMINA_INTERVAL := 0.1 # how often to drain stamina by GLIDE_STAMINA_COST when gliding, in seconds
 const STAMINA_REGEN_RATE := 2 # stamina to regen per STAMINA_REGEN_INTERVAL
 const STAMINA_REGEN_INTERVAL := 0.025 # how often to increase stamina by STAMINA_REGEN_RATE, in seconds
+const STAMINA_CHERRIES_INCREASE := 25 # the amount your stamina increases when getting cherries
+const STAMINA_INCREASE_LABEL_TIMER := 3 # the amount of time to display the "Stamina increased!" message, in seconds
 
 @export var gravity := 635.0
 # Lift is an upward force that counteracts the downward force of gravity.
@@ -29,12 +31,15 @@ const STAMINA_REGEN_INTERVAL := 0.025 # how often to increase stamina by STAMINA
 @onready var stamina_bar = get_node("StaminaBar")
 @onready var stamina_regen_timer = get_node("StaminaRegenTimer")
 @onready var glide_stamina_timer = get_node("GlideStaminaTimer")
+@onready var stamina_increase_label_timer = get_node("StaminaIncreaseLabelTimer")
 @onready var letter_label = get_node("LetterLabel")
 @onready var mailbox_label = get_node("MailboxLabel")
+@onready var stamina_increase_label = get_node("StaminaIncreaseLabel")
 @onready var jump_sfx = get_node("JumpSFX")
 @onready var letter_pickup_sfx = get_node("LetterPickupSFX")
 @onready var letter_deposit_sfx = get_node("LetterDepositSFX")
 @onready var mailbox_full_sfx = get_node("MailboxFullSFX")
+@onready var cherry_pickup_sfx = get_node("CherryPickupSFX")
 
 var is_facing_right := true
 var is_pecking := false
@@ -80,6 +85,12 @@ func _on_area_2d_area_entered(area):
 	if ("Mailbox" in area.get_name()):
 		is_near_mailbox = true
 		near_mailbox = area
+	if ("Cherries" in area.get_name()):
+		cherry_pickup_sfx.play()
+		stamina_bar.max_value += STAMINA_CHERRIES_INCREASE
+		max_stamina += STAMINA_CHERRIES_INCREASE
+		stamina_increase_label.visible = true
+		stamina_increase_label_timer.start(STAMINA_INCREASE_LABEL_TIMER)
 
 func _on_area_2d_area_exited(area):
 	if ("Mailbox" in area.get_name()):
@@ -88,3 +99,7 @@ func _on_area_2d_area_exited(area):
 
 func can_deposit() -> bool:
 	return is_near_mailbox and letters > 0 and !near_mailbox.is_full()
+
+
+func _on_stamina_increase_label_timer_timeout():
+	stamina_increase_label.visible = false

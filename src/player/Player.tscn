@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://cv64d407pajq1"]
+[gd_scene load_steps=29 format=3 uid="uid://cv64d407pajq1"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_3e3jd"]
 [ext_resource type="Texture2D" uid="uid://csysjqawnmfrt" path="res://assets/playerbird.png" id="2_nt4sg"]
@@ -18,6 +18,7 @@
 [ext_resource type="AudioStream" uid="uid://chg4m0354rjvb" path="res://assets/sfx/jump.wav" id="15_sytta"]
 [ext_resource type="AudioStream" uid="uid://ja0vpmhb14kv" path="res://assets/sfx/letter_pickup.wav" id="16_xctil"]
 [ext_resource type="AudioStream" uid="uid://cq1xmgclkx6k5" path="res://assets/sfx/letter_deposit.wav" id="17_xpqa1"]
+[ext_resource type="AudioStream" uid="uid://bqyqt3wufjtk4" path="res://assets/sfx/cherry_pickup.wav" id="19_j56tp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dvfak"]
 size = Vector2(19, 51)
@@ -164,6 +165,7 @@ texture_progress = ExtResource("11_5bwjb")
 texture = ExtResource("2_nt4sg")
 hframes = 5
 vframes = 3
+frame = 11
 
 [node name="Camera2D" type="Camera2D" parent="."]
 offset = Vector2(0, -50)
@@ -208,6 +210,8 @@ wait_time = 0.25
 [node name="GlideStaminaTimer" type="Timer" parent="."]
 wait_time = 0.5
 
+[node name="StaminaIncreaseLabelTimer" type="Timer" parent="."]
+
 [node name="LetterUI" type="Sprite2D" parent="."]
 position = Vector2(-491, -304)
 scale = Vector2(2.43333, 2.66667)
@@ -247,6 +251,21 @@ theme_override_font_sizes/font_size = 64
 text = "0/5"
 vertical_alignment = 1
 
+[node name="StaminaIncreaseLabel" type="Label" parent="."]
+visible = false
+texture_filter = 1
+offset_left = -110.0
+offset_top = -63.0
+offset_right = 110.0
+offset_bottom = -31.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("13_cso16")
+theme_override_font_sizes/font_size = 32
+text = "Stamina up!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="JumpSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("15_sytta")
 volume_db = -4.685
@@ -261,7 +280,11 @@ volume_db = -2.811
 [node name="MailboxFullSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("15_k3tu3")
 
+[node name="CherryPickupSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("19_j56tp")
+
 [connection signal="area_entered" from="MailboxDetection" to="." method="_on_area_2d_area_entered"]
 [connection signal="area_exited" from="MailboxDetection" to="." method="_on_area_2d_area_exited"]
 [connection signal="timeout" from="StaminaRegenTimer" to="PlayerFSM" method="_on_stamina_regen_timer_timeout"]
 [connection signal="timeout" from="GlideStaminaTimer" to="PlayerFSM/Glide" method="_on_glide_stamina_timer_timeout"]
+[connection signal="timeout" from="StaminaIncreaseLabelTimer" to="." method="_on_stamina_increase_label_timer_timeout"]
