@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://cv64d407pajq1"]
+[gd_scene load_steps=31 format=3 uid="uid://cv64d407pajq1"]
 
 [ext_resource type="Script" path="res://src/player/player.gd" id="1_3e3jd"]
 [ext_resource type="Texture2D" uid="uid://csysjqawnmfrt" path="res://assets/playerbird.png" id="2_nt4sg"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://src/player/idle.gd" id="4_5sgm5"]
 [ext_resource type="Script" path="res://src/player/move.gd" id="5_bmaea"]
 [ext_resource type="Script" path="res://src/player/jump.gd" id="6_cgmje"]
+[ext_resource type="Texture2D" uid="uid://bnrc0stqhrb3w" path="res://assets/playerbird_victory.png" id="6_p26wq"]
 [ext_resource type="Script" path="res://src/player/glide.gd" id="7_dynfx"]
 [ext_resource type="Script" path="res://src/player/fall.gd" id="8_pi5d4"]
 [ext_resource type="Texture2D" uid="uid://b2b5ypujqnhjr" path="res://assets/stamina_under.png" id="9_efelf"]
@@ -19,6 +20,7 @@
 [ext_resource type="AudioStream" uid="uid://ja0vpmhb14kv" path="res://assets/sfx/letter_pickup.wav" id="16_xctil"]
 [ext_resource type="AudioStream" uid="uid://cq1xmgclkx6k5" path="res://assets/sfx/letter_deposit.wav" id="17_xpqa1"]
 [ext_resource type="AudioStream" uid="uid://bqyqt3wufjtk4" path="res://assets/sfx/cherry_pickup.wav" id="19_j56tp"]
+[ext_resource type="AudioStream" uid="uid://cvvw3hklfvpjq" path="res://assets/sfx/victory.wav" id="20_xp8xx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dvfak"]
 size = Vector2(19, 51)
@@ -165,7 +167,14 @@ texture_progress = ExtResource("11_5bwjb")
 texture = ExtResource("2_nt4sg")
 hframes = 5
 vframes = 3
-frame = 11
+frame = 3
+
+[node name="Sprite2DVictory" type="Sprite2D" parent="."]
+visible = false
+texture = ExtResource("6_p26wq")
+hframes = 5
+vframes = 3
+frame = 3
 
 [node name="Camera2D" type="Camera2D" parent="."]
 offset = Vector2(0, -50)
@@ -211,6 +220,10 @@ wait_time = 0.25
 wait_time = 0.5
 
 [node name="StaminaIncreaseLabelTimer" type="Timer" parent="."]
+
+[node name="VictoryMessageTimer" type="Timer" parent="."]
+
+[node name="CloseMessageTimer" type="Timer" parent="."]
 
 [node name="LetterUI" type="Sprite2D" parent="."]
 position = Vector2(-491, -304)
@@ -266,6 +279,55 @@ text = "Stamina up!"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="CloseMessageLabel" type="Label" parent="."]
+visible = false
+texture_filter = 1
+offset_left = -280.0
+offset_top = -119.0
+offset_right = 280.0
+offset_bottom = -94.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("13_cso16")
+theme_override_font_sizes/font_size = 24
+text = "Press X to close messages."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="YouWinMessageLabel" type="Label" parent="."]
+visible = false
+texture_filter = 1
+offset_left = -556.0
+offset_top = 104.0
+offset_right = 4.0
+offset_bottom = 254.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("13_cso16")
+theme_override_font_sizes/font_size = 24
+text = "Thank you for playing!
+
+Made by Matthew Fudge for Ludum Dare 53.
+
+(there's nothing else to complete, but
+you can still fly around if you'd like.)
+"
+vertical_alignment = 1
+
+[node name="YouWinLabel" type="Label" parent="."]
+visible = false
+texture_filter = 1
+offset_left = -152.0
+offset_top = -198.0
+offset_right = 152.0
+offset_bottom = -118.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("13_cso16")
+theme_override_font_sizes/font_size = 64
+text = "You win!"
+vertical_alignment = 1
+
 [node name="JumpSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("15_sytta")
 volume_db = -4.685
@@ -283,8 +345,13 @@ stream = ExtResource("15_k3tu3")
 [node name="CherryPickupSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("19_j56tp")
 
+[node name="VictorySFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("20_xp8xx")
+
 [connection signal="area_entered" from="MailboxDetection" to="." method="_on_area_2d_area_entered"]
 [connection signal="area_exited" from="MailboxDetection" to="." method="_on_area_2d_area_exited"]
 [connection signal="timeout" from="StaminaRegenTimer" to="PlayerFSM" method="_on_stamina_regen_timer_timeout"]
 [connection signal="timeout" from="GlideStaminaTimer" to="PlayerFSM/Glide" method="_on_glide_stamina_timer_timeout"]
 [connection signal="timeout" from="StaminaIncreaseLabelTimer" to="." method="_on_stamina_increase_label_timer_timeout"]
+[connection signal="timeout" from="VictoryMessageTimer" to="." method="_on_victory_message_timer_timeout"]
+[connection signal="timeout" from="CloseMessageTimer" to="." method="_on_close_message_timer_timeout"]

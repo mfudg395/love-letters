@@ -10,6 +10,9 @@ const STAMINA_REGEN_RATE := 2 # stamina to regen per STAMINA_REGEN_INTERVAL
 const STAMINA_REGEN_INTERVAL := 0.025 # how often to increase stamina by STAMINA_REGEN_RATE, in seconds
 const STAMINA_CHERRIES_INCREASE := 25 # the amount your stamina increases when getting cherries
 const STAMINA_INCREASE_LABEL_TIMER := 3 # the amount of time to display the "Stamina increased!" message, in seconds
+const VICTORY_MESSAGE_TIME_DELAY := 2 # the amount of time to wait to display the full victory message, in seconds
+const FULL_MAILBOXES_FOR_VICTORY := 2 # the amount of mailboxes the player must fill to trigger the Victory label
+const CLOSE_MESSAGE_TIME_DELAY := 8 # the amount of time to wait before displaying the message for users to close victory message
 
 @export var gravity := 635.0
 # Lift is an upward force that counteracts the downward force of gravity.
@@ -29,17 +32,26 @@ const STAMINA_INCREASE_LABEL_TIMER := 3 # the amount of time to display the "Sta
 @onready var sprite = get_node("Sprite2D")
 @onready var state_machine = get_node("PlayerFSM")
 @onready var stamina_bar = get_node("StaminaBar")
+# Timers
 @onready var stamina_regen_timer = get_node("StaminaRegenTimer")
 @onready var glide_stamina_timer = get_node("GlideStaminaTimer")
+@onready var victory_message_timer = get_node("VictoryMessageTimer")
+@onready var close_message_timer = get_node("CloseMessageTimer")
+# Labels
 @onready var stamina_increase_label_timer = get_node("StaminaIncreaseLabelTimer")
 @onready var letter_label = get_node("LetterLabel")
 @onready var mailbox_label = get_node("MailboxLabel")
 @onready var stamina_increase_label = get_node("StaminaIncreaseLabel")
+@onready var you_win_label = get_node("YouWinLabel")
+@onready var you_win_message_label = get_node("YouWinMessageLabel")
+@onready var close_message_label = get_node("CloseMessageLabel")
+# Sound effects
 @onready var jump_sfx = get_node("JumpSFX")
 @onready var letter_pickup_sfx = get_node("LetterPickupSFX")
 @onready var letter_deposit_sfx = get_node("LetterDepositSFX")
 @onready var mailbox_full_sfx = get_node("MailboxFullSFX")
 @onready var cherry_pickup_sfx = get_node("CherryPickupSFX")
+@onready var victory_sfx = get_node("VictorySFX")
 
 var is_facing_right := true
 var is_pecking := false
@@ -55,6 +67,7 @@ func _process(delta) -> void:
 	mailbox_label.text = str(full_mailboxes) + "/5"
 
 func _physics_process(delta) -> void:
+	print(sprite.texture)
 	if Input.is_action_pressed("move_right"):
 		is_facing_right = true
 	elif Input.is_action_pressed("move_left"):
@@ -72,11 +85,27 @@ func _physics_process(delta) -> void:
 		if can_deposit():
 			letters -= 1
 			near_mailbox.deposit_letter()
+			
 			if near_mailbox.is_full():
 				full_mailboxes += 1
-				mailbox_full_sfx.play()
+				if full_mailboxes == FULL_MAILBOXES_FOR_VICTORY:
+					victory_sfx.play()
+					you_win_label.visible = true
+					victory_message_timer.start(VICTORY_MESSAGE_TIME_DELAY)
+					close_message_timer.start(CLOSE_MESSAGE_TIME_DELAY)
+					sprite.texture = $Sprite2DVictory.texture
+				else:
+					mailbox_full_sfx.play()
 			else:
 				letter_deposit_sfx.play()
+	
+	if Input.is_action_just_pressed("close"):
+		if close_message_label.visible:
+			you_win_label.visible = false
+			you_win_message_label.visible = false
+			close_message_label.visible = false
+			close_message_timer.stop()
+			victory_message_timer.stop()
 
 func _on_area_2d_area_entered(area):
 	if ("Letter" in area.get_name()):
@@ -103,3 +132,11 @@ func can_deposit() -> bool:
 
 func _on_stamina_increase_label_timer_timeout():
 	stamina_increase_label.visible = false
+
+
+func _on_victory_message_timer_timeout():
+	you_win_message_label.visible = true
+
+
+func _on_close_message_timer_timeout():
+	close_message_label.visible = true

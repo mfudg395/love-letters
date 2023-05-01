@@ -277,15 +277,6 @@ position = Vector2(174, 294)
 [node name="Cherries2" parent="." instance=ExtResource("5_k0ath")]
 position = Vector2(321, 385)
 
-[node name="Mailbox" parent="." instance=ExtResource("4_aunxb")]
-position = Vector2(270, 632)
-
-[node name="Mailbox2" parent="." instance=ExtResource("4_aunxb")]
-position = Vector2(1103, 440)
-
-[node name="Player" parent="." instance=ExtResource("1_ek8qi")]
-position = Vector2(80, 536)
-
 [node name="Letter" parent="." instance=ExtResource("3_h8vt6")]
 position = Vector2(994, 440)
 
@@ -318,3 +309,12 @@ position = Vector2(885, 390)
 
 [node name="Letter5" parent="." instance=ExtResource("3_h8vt6")]
 position = Vector2(148, 599)
+
+[node name="Mailbox" parent="." instance=ExtResource("4_aunxb")]
+position = Vector2(270, 632)
+
+[node name="Mailbox2" parent="." instance=ExtResource("4_aunxb")]
+position = Vector2(1103, 440)
+
+[node name="Player" parent="." instance=ExtResource("1_ek8qi")]
+position = Vector2(80, 536)
