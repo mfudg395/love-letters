@@ -311,7 +311,7 @@ theme_override_fonts/font = ExtResource("13_cso16")
 theme_override_font_sizes/font_size = 24
 text = "Thank you for playing!
 
-Made by Matthew Fudge for Ludum Dare 53.
+Made by Matthew F. for Ludum Dare 53.
 
 (there's nothing else to complete, but
 you can still fly around if you'd like.)
