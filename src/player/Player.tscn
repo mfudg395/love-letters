@@ -140,6 +140,7 @@ _data = {
 [node name="Player" type="CharacterBody2D"]
 texture_filter = 1
 collision_mask = 6
+platform_on_leave = 2
 script = ExtResource("1_3e3jd")
 
 [node name="StateLabel" type="Label" parent="."]
@@ -178,6 +179,7 @@ frame = 3
 
 [node name="Camera2D" type="Camera2D" parent="."]
 offset = Vector2(0, -50)
+zoom = Vector2(0.9, 0.9)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
@@ -212,6 +214,8 @@ script = ExtResource("7_dynfx")
 
 [node name="Fall" type="Node" parent="PlayerFSM"]
 script = ExtResource("8_pi5d4")
+
+[node name="GlideDelayTimer" type="Timer" parent="PlayerFSM/Fall"]
 
 [node name="StaminaRegenTimer" type="Timer" parent="."]
 wait_time = 0.25
@@ -350,6 +354,7 @@ stream = ExtResource("20_xp8xx")
 
 [connection signal="area_entered" from="MailboxDetection" to="." method="_on_area_2d_area_entered"]
 [connection signal="area_exited" from="MailboxDetection" to="." method="_on_area_2d_area_exited"]
+[connection signal="timeout" from="PlayerFSM/Fall/GlideDelayTimer" to="PlayerFSM/Fall" method="_on_glide_delay_timer_timeout"]
 [connection signal="timeout" from="StaminaRegenTimer" to="PlayerFSM" method="_on_stamina_regen_timer_timeout"]
 [connection signal="timeout" from="GlideStaminaTimer" to="PlayerFSM/Glide" method="_on_glide_stamina_timer_timeout"]
 [connection signal="timeout" from="StaminaIncreaseLabelTimer" to="." method="_on_stamina_increase_label_timer_timeout"]

@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://bp0y5hq665ec2"]
+
+[ext_resource type="Texture2D" uid="uid://b0lib88h703t1" path="res://assets/horizontal_moving_plat.png" id="1_0awcx"]
+[ext_resource type="Script" path="res://src/platforms/HorizontalMovingPlat.gd" id="1_r2esk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ofwei"]
+size = Vector2(88, 24)
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_r2esk")
+
+[node name="HorizontalMovingPlat" type="AnimatableBody2D" parent="."]
+collision_layer = 4
+
+[node name="Sprite2D" type="Sprite2D" parent="HorizontalMovingPlat"]
+texture_filter = 1
+texture = ExtResource("1_0awcx")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HorizontalMovingPlat"]
+shape = SubResource("RectangleShape2D_ofwei")

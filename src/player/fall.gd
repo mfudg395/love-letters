@@ -6,9 +6,13 @@ extends State
 # A string that's used as this state's key in the state machine's dictionary of
 # states. Just used for debugging/ease-of-access purposes at the moment.
 @onready var state_name := "fall"
+const GLIDE_DELAY := 0.05 # Amount of time you must fall for before you can glide, in seconds. Makes controls feel tighter by preventing accidental glides after jumping.
+@onready var glide_delay_timer = get_node("GlideDelayTimer")
+@onready var can_glide = false
 
-#func enter() -> void:
-#	player.animations.play("fall")
+func enter() -> void:
+	can_glide = false
+	glide_delay_timer.start(GLIDE_DELAY)
 
 func physics_process(delta: float) -> void:
 #	player.sprite.flip_h = false if player.is_facing_right else true
@@ -36,9 +40,14 @@ func physics_process(delta: float) -> void:
 			state_machine.transition_to("Idle")
 		else:
 			state_machine.transition_to("Move")
-	if Input.is_action_pressed("jump") and player.current_stamina > 0:
+	if Input.is_action_pressed("jump") and player.current_stamina > 0 and can_glide:
 		state_machine.transition_to("Glide")
 	if Input.is_action_just_pressed("jump"):
 		if player.current_stamina >= player.JUMP_STAMINA_COST:
 			player.current_stamina -= player.JUMP_STAMINA_COST
 			state_machine.transition_to("Jump")
+
+
+func _on_glide_delay_timer_timeout():
+	can_glide = true
+	glide_delay_timer.stop()

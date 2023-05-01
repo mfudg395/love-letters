@@ -1,17 +1,17 @@
 class_name Player
 extends CharacterBody2D
 
-const MAX_FALL_SPEED := 125
+const MAX_FALL_SPEED := 175
 const AIR_DEACCELERATION := 0.99
 const JUMP_STAMINA_COST := 25
 const GLIDE_STAMINA_COST := 1 # stamina drain per GLIDE_STAMINA_INTERVAL
 const GLIDE_STAMINA_INTERVAL := 0.1 # how often to drain stamina by GLIDE_STAMINA_COST when gliding, in seconds
-const STAMINA_REGEN_RATE := 2 # stamina to regen per STAMINA_REGEN_INTERVAL
+var STAMINA_REGEN_RATE := 3 # stamina to regen per STAMINA_REGEN_INTERVAL
 const STAMINA_REGEN_INTERVAL := 0.025 # how often to increase stamina by STAMINA_REGEN_RATE, in seconds
-const STAMINA_CHERRIES_INCREASE := 25 # the amount your stamina increases when getting cherries
+const STAMINA_CHERRIES_INCREASE := 30 # the amount your stamina increases when getting cherries
 const STAMINA_INCREASE_LABEL_TIMER := 3 # the amount of time to display the "Stamina increased!" message, in seconds
 const VICTORY_MESSAGE_TIME_DELAY := 2 # the amount of time to wait to display the full victory message, in seconds
-const FULL_MAILBOXES_FOR_VICTORY := 2 # the amount of mailboxes the player must fill to trigger the Victory label
+const FULL_MAILBOXES_FOR_VICTORY := 5 # the amount of mailboxes the player must fill to trigger the Victory label
 const CLOSE_MESSAGE_TIME_DELAY := 8 # the amount of time to wait before displaying the message for users to close victory message
 
 @export var gravity := 635.0
@@ -67,7 +67,6 @@ func _process(delta) -> void:
 	mailbox_label.text = str(full_mailboxes) + "/5"
 
 func _physics_process(delta) -> void:
-	print(sprite.texture)
 	if Input.is_action_pressed("move_right"):
 		is_facing_right = true
 	elif Input.is_action_pressed("move_left"):
@@ -118,6 +117,8 @@ func _on_area_2d_area_entered(area):
 		cherry_pickup_sfx.play()
 		stamina_bar.max_value += STAMINA_CHERRIES_INCREASE
 		max_stamina += STAMINA_CHERRIES_INCREASE
+		STAMINA_REGEN_RATE += 3
+		
 		stamina_increase_label.visible = true
 		stamina_increase_label_timer.start(STAMINA_INCREASE_LABEL_TIMER)
 
@@ -129,14 +130,11 @@ func _on_area_2d_area_exited(area):
 func can_deposit() -> bool:
 	return is_near_mailbox and letters > 0 and !near_mailbox.is_full()
 
-
 func _on_stamina_increase_label_timer_timeout():
 	stamina_increase_label.visible = false
 
-
 func _on_victory_message_timer_timeout():
 	you_win_message_label.visible = true
-
 
 func _on_close_message_timer_timeout():
 	close_message_label.visible = true
