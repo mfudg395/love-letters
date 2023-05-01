@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Love Letter"
+config/name="Love Letters"
 run/main_scene="res://src/Level1.tscn"
 config/features=PackedStringArray("4.0", "Forward Plus")
 run/max_fps=60
@@ -59,3 +59,7 @@ deliver={
 
 2d_physics/layer_1="player"
 2d_physics/layer_2="level"
+
+[rendering]
+
+environment/defaults/default_clear_color=Color(0.576471, 0.603922, 0.87451, 1)
