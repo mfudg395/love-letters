@@ -14,7 +14,8 @@ config/name="Love Letters"
 run/main_scene="res://src/Level1.tscn"
 config/features=PackedStringArray("4.0", "Forward Plus")
 run/max_fps=60
-config/icon="res://icon.svg"
+config/icon="res://icon.png"
+config/windows_native_icon="res://gameicon.ico"
 
 [display]
 
